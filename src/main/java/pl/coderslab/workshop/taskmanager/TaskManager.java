@@ -29,23 +29,18 @@ public class TaskManager {
             showMenu();
             String input = scanner.nextLine();
             switch (input) {
-                case "add":
-                    addTask();
-                    break;
-                case "remove":
+                case "add" -> addTask();
+                case "remove" -> {
                     removeTask(tasks, getTheNumber());
                     System.out.println("Value was successfully deleted.");
-                    break;
-                case "list":
-                    printTab(tasks);
-                    break;
-                case "exit":
+                }
+                case "list" -> printTab(tasks);
+                case "exit" -> {
                     saveTasksToFile(fileName, tasks);
                     System.out.println(ConsoleColors.RED + "Good Bye, see you next time");
                     System.exit(0);
-                    break;
-                default:
-                    System.out.println("Please select a correct option.");
+                }
+                default -> System.out.println("Please select a correct option.");
             }
         } while (true);
     }
@@ -64,9 +59,9 @@ public class TaskManager {
         }
 
         private static void printTab (String[][]tasks){
-            for (int i = 0; i < tasks.length; i++) {
-                for (int j = 0; j < tasks[i].length ; j++) {
-                    System.out.println(tasks[i][j]+" ");
+            for (String[] task : tasks) {
+                for (String s : task) {
+                    System.out.println(s + " ");
                 }
                 System.out.println();
             }
@@ -123,7 +118,7 @@ public class TaskManager {
             String description = scanner.nextLine();
             System.out.println("Please add task due date");
             String dueDate = scanner.nextLine();
-            String isImportant = "true";
+            String isImportant;
             do {
                 System.out.println("Is your task important: true/false");
                 isImportant = scanner.nextLine();
@@ -149,9 +144,7 @@ public class TaskManager {
 
                     for (int i = 0; i < strings.size(); i++) {
                         String[] split = strings.get(i).split(",");
-                        for (int j = 0; j < split.length; j++) {
-                            tab[i][j] = split[j];
-                        }
+                        System.arraycopy(split, 0, tab[i], 0, split.length);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
