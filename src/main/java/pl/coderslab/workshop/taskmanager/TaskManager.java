@@ -17,7 +17,7 @@ public class TaskManager {
     static final String fileName = "tasks.csv";
     static String[][] tasks;
 
-    public static void Main(String[] args) {
+   public static void main(String[] args){
         run();
     }
 
@@ -53,12 +53,11 @@ public class TaskManager {
         }
     }
 
-    private static void showWelcome () {
+    public static void showWelcome () {
             String userName = System.getProperty("user.name");
             System.out.println(ConsoleColors.RED + "Welcome " + userName + ConsoleColors.RESET);
         }
-
-        private static void printTab (String[][]tasks){
+        public static void printTab (String[][]tasks){
             for (String[] task : tasks) {
                 for (String s : task) {
                     System.out.println(s + " ");
@@ -67,32 +66,32 @@ public class TaskManager {
             }
         }
 
-        private static void removeTask (String[][]tasks, int theNumber){
+        private static void removeTask (String[][] tasks, int theNumber){
             try {
                 if (theNumber < tasks.length) {
-                    tasks = ArrayUtils.remove(tasks, theNumber);
+                    if (tasks.length - 1 - theNumber >= 0) {
+                        System.arraycopy(tasks, theNumber + 1, tasks, theNumber, tasks.length - 1 - theNumber);
+                        tasks = Arrays.copyOf(tasks, tasks.length - 1);
+                    }
                 }
             } catch (ArrayIndexOutOfBoundsException ex) {
                 System.out.println("Element not exist in tab");
             }
-
-
         }
 
-        private static void saveTasksToFile(String fileName, String[][]tasks){
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Please add task description");
-            String description = scanner.nextLine();
-            System.out.println("Please add task due date");
-            String dueDate = scanner.nextLine();
-            System.out.println("Is your task important: true/false");
-            String isImportant = scanner.nextLine();
-            tasks = Arrays.copyOf(tasks, tasks.length + 1);
-            tasks[tasks.length - 1] = new String[3];
-            tasks[tasks.length - 1][0] = description;
-            tasks[tasks.length - 1][1] = dueDate;
-            tasks[tasks.length - 1][2] = isImportant;
+        public static void saveTasksToFile(String fileName, String[][]tasks){
+            Path dir = Paths.get("/home/michal/ONL_JEE_Workshop_TaskManager/src/main/java/pl/coderslab/workshop/taskmanager/tasks.csv");
 
+            String[] lines = new String[tasks.length];
+            for (int i = 0; i < tasks.length; i++) {
+                lines[i] = String.join(",", tasks[i]);
+            }
+
+            try {
+                Files.write(dir, Arrays.asList(lines));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
 
         private static int getTheNumber () {
@@ -122,7 +121,7 @@ public class TaskManager {
             do {
                 System.out.println("Is your task important: true/false");
                 isImportant = scanner.nextLine();
-            }while (!(scanner.nextLine().equals("true") || scanner.nextLine().equals("false"))) ;
+            }while (!(isImportant.equals("true") || isImportant.equals("false"))) ;
                 tasks = Arrays.copyOf(tasks, tasks.length + 1);
                 tasks[tasks.length - 1] = new String[3];
                 tasks[tasks.length - 1][0] = description;
@@ -132,7 +131,7 @@ public class TaskManager {
         }
 
             private static String[][] loadFile (String filename){
-                Path path = Paths.get(fileName);
+                Path path = Paths.get("/home/michal/ONL_JEE_Workshop_TaskManager/src/main/java/pl/coderslab/workshop/taskmanager/tasks.csv");
                 String[][] tab = null;
                 if (!Files.exists(path)) {
                     System.out.println("File not exist.");
