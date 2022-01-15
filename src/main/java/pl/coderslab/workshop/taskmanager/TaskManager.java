@@ -67,20 +67,19 @@ public class TaskManager {
         }
 
         private static void removeTask (String[][] tasks, int theNumber){
-            try {
-                if (theNumber < tasks.length) {
-                    if (tasks.length - 1 - theNumber >= 0) {
-                        System.arraycopy(tasks, theNumber + 1, tasks, theNumber, tasks.length - 1 - theNumber);
-                        tasks = Arrays.copyOf(tasks, tasks.length - 1);
-                    }
+            try {   if (theNumber < tasks.length) {
+                if (tasks.length - 1 - theNumber >= 0) {
+                    System.arraycopy(tasks, theNumber + 1, tasks, theNumber, tasks.length - 1 - theNumber);
+                    tasks = Arrays.copyOf(tasks, tasks.length - 1);
                 }
+            }
             } catch (ArrayIndexOutOfBoundsException ex) {
                 System.out.println("Element not exist in tab");
             }
         }
 
         public static void saveTasksToFile(String fileName, String[][]tasks){
-            Path dir = Paths.get("/home/michal/ONL_JEE_Workshop_TaskManager/src/main/java/pl/coderslab/workshop/taskmanager/tasks.csv");
+            Path dir = Paths.get(fileName);
 
             String[] lines = new String[tasks.length];
             for (int i = 0; i < tasks.length; i++) {
@@ -131,7 +130,7 @@ public class TaskManager {
         }
 
             private static String[][] loadFile (String filename){
-                Path path = Paths.get("/home/michal/ONL_JEE_Workshop_TaskManager/src/main/java/pl/coderslab/workshop/taskmanager/tasks.csv");
+                Path path = Paths.get(fileName);
                 String[][] tab = null;
                 if (!Files.exists(path)) {
                     System.out.println("File not exist.");
